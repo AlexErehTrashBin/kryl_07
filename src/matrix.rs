@@ -47,6 +47,13 @@ impl<T> Matrix<T> where T: Real + SubAssign + AddAssign + Add {
         });
         Ok(())
     }
+    
+    pub fn map_each(&mut self, mapper: fn (&T) -> T) where T: Sized {
+        let lol: Vec<Vec<T>> = self.matrix.iter().map(|x| {
+            return x.iter().map(mapper).collect();
+        }).collect();
+        self.matrix = lol;
+    }
 
     fn eliminate(&mut self, i: usize) -> Result<()> {
         if self[i][i] == zero() {
@@ -181,7 +188,7 @@ impl<T> Display for Matrix<T> where T: Real + SubAssign + AddAssign + Add + Disp
                 write!(f, "{:#}", self[row_idx][col_idx])?;
             }
             write!(f, "]")?;
-            write!(f, "\n")?;
+            writeln!(f, "")?;
         }
         Ok(())
     }

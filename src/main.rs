@@ -1,6 +1,8 @@
 pub mod matrix;
 pub mod error;
 
+use num::traits::real::Real;
+
 fn main() {
     let matrix = matrix![
         0.43, 1.24, -0.58, 2.71;
@@ -14,8 +16,10 @@ fn main() {
         Ok(result) => {
             println!("Найденные корни: ");
             println!("{:}", result.result);
-            println!("Найденные epsilon-отклонения: ");
-            println!("{:}", matrix.calculate_right(&result.epsilon))
+            println!("Найденная невязка: ");
+            let mut eps = matrix.calculate_right(&result.epsilon);
+            eps.map_each(|x| {x.abs()});
+            println!("{:}", eps)
         }
     }
 }
